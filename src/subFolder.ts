@@ -27,19 +27,20 @@ subRouter.get("/:id/", async (req: Request, res: Response) => {
 module.exports = subRouter;
 
 subRouter.delete("/:id/", async (req: Request, res: Response) => {
-  let mainFound: boolean = false;
+  let mainData: any;
   try {
     const data = await mainFolder.find({ _id: req.params.id });
     res.status(200).json({
       error: false,
       result: data,
     });
-    console.log("found");
-    mainFound = true;
+    console.log("found", data);
+    mainData = data;
   } catch {
     res.status(500).json({ error: true });
   } finally {
-    if (mainFound) {
+    console.log(mainData);
+    if (mainData.length > 0) {
       try {
         await mainFolder.findOneAndRemove({ _id: req.params.id });
       } catch {
